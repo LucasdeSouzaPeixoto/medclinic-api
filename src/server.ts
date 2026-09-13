@@ -16,6 +16,10 @@ import userRoutes from "./routes/user.routes";
 // ...
 app.use("/users", userRoutes);
 
+import adminRoutes from "./routes/admin.routes";
+// ...
+app.use("/admin", adminRoutes);
+
 const PORT = process.env.PORT || 3000;
 
 AppDataSource.initialize()
