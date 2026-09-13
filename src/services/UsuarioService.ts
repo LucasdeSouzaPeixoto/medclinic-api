@@ -9,6 +9,7 @@ import { AppError } from "../utils/AppError";
 export class UsuarioService {
   async cadastrar(dados: CreateUsuarioDTO): Promise<Usuario> {
     const { nome, email, senha } = dados;
+    const emailNormalizado = email.toLowerCase().trim();
 
     if (!nome || !email || !senha) {
       throw new AppError("Nome, email e senha sao obrigatorios.", 400);
@@ -19,7 +20,7 @@ export class UsuarioService {
      throw new AppError("Formato de email invalido.", 400);
 }
 
-    const usuarioExistente = await UsuarioRepository.findByEmail(email);
+    const usuarioExistente = await UsuarioRepository.findByEmail(emailNormalizado);
     if (usuarioExistente) {
       throw new AppError("Email ja cadastrado.", 409); // 409 = Conflict
 }
@@ -41,12 +42,13 @@ export class UsuarioService {
 
   async login(dados: LoginDTO): Promise<{ token: string }> {
   const { email, senha } = dados;
+  const emailNormalizado = email.toLowerCase().trim();
 
   if (!email || !senha) {
     throw new AppError("Email e senha sao obrigatorios.", 400);
 }
 
-  const usuario = await UsuarioRepository.findByEmail(email);
+  const usuario = await UsuarioRepository.findByEmail(emailNormalizado);
   if (!usuario) {
     throw new AppError("Credenciais invalidas.", 401);
 }
