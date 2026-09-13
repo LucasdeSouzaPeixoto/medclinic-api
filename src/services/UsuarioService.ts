@@ -14,14 +14,18 @@ export class UsuarioService {
       throw new AppError("Nome, email e senha sao obrigatorios.", 400);
 }
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    throw new AppError("Formato de email invalido.", 400);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+     throw new AppError("Formato de email invalido.", 400);
 }
 
-const usuarioExistente = await UsuarioRepository.findByEmail(email);
-if (usuarioExistente) {
-  throw new AppError("Email ja cadastrado.", 409); // 409 = Conflict
+    const usuarioExistente = await UsuarioRepository.findByEmail(email);
+    if (usuarioExistente) {
+      throw new AppError("Email ja cadastrado.", 409); // 409 = Conflict
+}
+
+    if (senha.length < 6) {
+      throw new AppError("A senha deve ter no minimo 6 caracteres.", 400);
 }
 
     const senhaCriptografada = await hashPassword(senha);
