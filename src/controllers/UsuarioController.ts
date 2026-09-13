@@ -16,4 +16,14 @@ export class UsuarioController {
       return res.status(400).json({ erro: mensagem });
     }
   }
+
+  async login(req: Request, res: Response): Promise<Response> {
+  try {
+    const resultado = await usuarioService.login(req.body);
+    return res.status(200).json(resultado);
+  } catch (error) {
+    const mensagem = error instanceof Error ? error.message : "Erro desconhecido.";
+    return res.status(401).json({ erro: mensagem });
+  }
+}
 }
