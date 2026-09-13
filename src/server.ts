@@ -20,6 +20,10 @@ import adminRoutes from "./routes/admin.routes";
 // ...
 app.use("/admin", adminRoutes);
 
+import { errorHandler } from "./middlewares/errorHandler";
+// ... 
+app.use(errorHandler);
+
 const PORT = process.env.PORT || 3000;
 
 AppDataSource.initialize()

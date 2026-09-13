@@ -4,24 +4,25 @@ import { Usuario } from "../entities/Usuario";
 import { comparePassword, hashPassword } from "../utils/passwordUtils";
 import { generateToken } from "../utils/jwtUtils";
 import { LoginDTO } from "../dtos/LoginDTO";
+import { AppError } from "../utils/AppError";
 
 export class UsuarioService {
   async cadastrar(dados: CreateUsuarioDTO): Promise<Usuario> {
     const { nome, email, senha } = dados;
 
     if (!nome || !email || !senha) {
-      throw new Error("Nome, email e senha sao obrigatorios.");
-    }
+      throw new AppError("Nome, email e senha sao obrigatorios.", 400);
+}
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      throw new Error("Formato de email invalido.");
-    }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    throw new AppError("Formato de email invalido.", 400);
+}
 
-    const usuarioExistente = await UsuarioRepository.findByEmail(email);
-    if (usuarioExistente) {
-      throw new Error("Email ja cadastrado.");
-    }
+const usuarioExistente = await UsuarioRepository.findByEmail(email);
+if (usuarioExistente) {
+  throw new AppError("Email ja cadastrado.", 409); // 409 = Conflict
+}
 
     const senhaCriptografada = await hashPassword(senha);
 
@@ -38,18 +39,18 @@ export class UsuarioService {
   const { email, senha } = dados;
 
   if (!email || !senha) {
-    throw new Error("Email e senha sao obrigatorios.");
-  }
+    throw new AppError("Email e senha sao obrigatorios.", 400);
+}
 
   const usuario = await UsuarioRepository.findByEmail(email);
   if (!usuario) {
-    throw new Error("Credenciais invalidas.");
-  }
+    throw new AppError("Credenciais invalidas.", 401);
+}
 
   const senhaValida = await comparePassword(senha, usuario.senha);
   if (!senhaValida) {
-    throw new Error("Credenciais invalidas.");
-  }
+    throw new AppError("Credenciais invalidas.", 401);
+}
 
   const token = generateToken({ id: usuario.id, role: usuario.role });
 
