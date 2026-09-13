@@ -145,6 +145,10 @@ Erros de negócio (validação, credenciais inválidas, permissão negada, e-mai
 | `409` | Tentativa de cadastro com e-mail já existente |
 | `500` | Erro interno não tratado |
 
+## Estrutura do banco de dados
+
+A tabela `usuarios` é criada automaticamente pelo TypeORM (`synchronize: true`) ao rodar a aplicação em desenvolvimento. Alternativamente, o script `src/database/scripts/create-tables.sql` documenta a estrutura equivalente e pode ser executado manualmente no PostgreSQL, se preferido.
+
 ## Autor
 
 Lucas de Souza Peixoto
