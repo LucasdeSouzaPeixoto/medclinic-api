@@ -12,6 +12,10 @@ import authRoutes from "./routes/auth.routes";
 // ...
 app.use("/auth", authRoutes);
 
+import userRoutes from "./routes/user.routes";
+// ...
+app.use("/users", userRoutes);
+
 const PORT = process.env.PORT || 3000;
 
 AppDataSource.initialize()
